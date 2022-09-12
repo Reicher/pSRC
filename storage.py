@@ -6,27 +6,26 @@ from pathlib import Path
 
 from PIL import ImageDraw, Image
 
+import pre_trained_classifier
+
 SETTINGS_FILENAME = "settings.json"
 
 
 def check_folder_struct(data):
     Path(data['data_root']).mkdir(parents=True, exist_ok=True)
     Path(data['tmp_root']).mkdir(parents=True, exist_ok=True)
-
-    external_path = data['data_root'] + '/external'
-    Path(external_path).mkdir(parents=True, exist_ok=True)
-
-    private_path = data['data_root'] + '/private'
-    Path(private_path).mkdir(parents=True, exist_ok=True)
-
-    image_path = private_path + '/image'
-    Path(image_path).mkdir(parents=True, exist_ok=True)
+    Path(data['ext_root']).mkdir(parents=True, exist_ok=True)
+    Path(data['prt_root']).mkdir(parents=True, exist_ok=True)
+    Path(data['prt_img_root']).mkdir(parents=True, exist_ok=True)
 
 
 def create_settings_file():
     data = {
         'data_root': '/home/regen/psrc/data',
-        'tmp_root': '/home/regen/psrc/tmp'
+        'tmp_root': '/home/regen/psrc/tmp',
+        'ext_root': '/home/regen/psrc/data/external',
+        'prt_root': '/home/regen/psrc/data/private',
+        'prt_img_root': '/home/regen/psrc/data/private/image',
     }
     json_string = json.dumps(data)
     with open(SETTINGS_FILENAME, 'w') as f:
@@ -64,10 +63,16 @@ def analysis(file):
     metadata = os.stat(file)
     stats = {k: getattr(metadata, k) for k in dir(metadata) if k.startswith('st_')}
 
+    # Get image tags
+    objects = pre_trained_classifier.get_classes(file)
+    # Faces
+    # etc
+
     # extract other basic metadata
     info_dict = {
-        "Original Filename": image.filename,
-        "stats": stats,
+        "Original Filename": os.path.basename(image.filename),
+        "Objects": objects,
+        "Stats": stats,
         "Image Size": image.size,
         "Image Format": image.format,
         "Image Mode": image.mode,

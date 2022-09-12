@@ -3,7 +3,6 @@ import json
 import os
 import shutil
 from os.path import exists
-
 import storage
 
 
@@ -23,7 +22,7 @@ def import_single_file(file, settings, verbose=False):
 
     info = storage.analysis(file)
     # TODO: identical ctime fix by checking original filename, adding _x.json
-    time = str(info['stats']['st_mtime_ns'])
+    time = str(info['Stats']['st_mtime_ns'])
     new_image_filename = time + '.jpeg'
     new_json_filename = time + '.json'
 
@@ -31,10 +30,9 @@ def import_single_file(file, settings, verbose=False):
     if new_image_filename not in os.listdir(new_path):
         shutil.copy2(file, new_path + new_image_filename)
 
-    if new_json_filename not in os.listdir(new_path):
+    with open(new_path + new_json_filename, 'w') as f:
         json_string = json.dumps(info)
-        with open(new_path + new_json_filename, 'w') as f:
-            f.write(json_string)
+        f.write(json_string)
 
     if verbose:
         print(f'Entity {time} information:')
@@ -54,4 +52,6 @@ if __name__ == '__main__':
         import_all_in_folder(args.folder, s)
     elif args.file:
         import_single_file(args.file, s)
+    else:
+        import_single_file('tmp/315_en_ful_snygg_blomma_brevid_mig_desutom_jaa_.jpg', s)
 
