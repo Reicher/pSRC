@@ -6,16 +6,16 @@ from os.path import exists
 import storage
 
 
-def import_all_in_folder(folder, settings):
+def all_in_folder(folder, settings):
     if not exists(folder):
         print(f'{folder} not found!')
         return
 
     for file in os.listdir(folder):
-        import_single_file(folder + file, settings, True)
+        single_file(folder + file, settings, True)
 
 
-def import_single_file(file, settings, verbose=False):
+def single_file(file, settings, verbose=False):
     if not exists(file):
         print(f'{file} not found!')
         return
@@ -49,9 +49,9 @@ if __name__ == '__main__':
 
     s = storage.init()
     if args.folder:
-        import_all_in_folder(args.folder, s)
+        all_in_folder(args.folder, s)
     elif args.file:
-        import_single_file(args.file, s)
+        single_file(args.file, s)
     else:
-        import_single_file('tmp/315_en_ful_snygg_blomma_brevid_mig_desutom_jaa_.jpg', s)
+        single_file('tmp/315_en_ful_snygg_blomma_brevid_mig_desutom_jaa_.jpg', s)
 

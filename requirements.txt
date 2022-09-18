@@ -1,5 +1,5 @@
 Pillow
 tensorflow
 numpy
-matplotlib
 image-classifiers
+pysimplegui
