@@ -6,7 +6,7 @@ from pathlib import Path
 
 from PIL import ImageDraw, Image
 
-import pre_trained_classifier
+from modules import pre_trained_classifier
 
 SETTINGS_FILENAME = "settings.json"
 

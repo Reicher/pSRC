@@ -1,8 +1,12 @@
 import argparse
+import io
 import json
 import os
 import shutil
 from os.path import exists
+
+from PIL import Image
+
 import storage
 
 
@@ -23,12 +27,13 @@ def single_file(file, settings, verbose=False):
     info = storage.analysis(file)
     # TODO: identical ctime fix by checking original filename, adding _x.json
     time = str(info['Stats']['st_mtime_ns'])
-    new_image_filename = time + '.jpeg'
+    new_image_filename = time + '.png'
     new_json_filename = time + '.json'
 
     new_path = settings['data_root'] + '/private/image/'
     if new_image_filename not in os.listdir(new_path):
-        shutil.copy2(file, new_path + new_image_filename)
+        image = Image.open(file)
+        image.save(new_path + new_image_filename)
 
     with open(new_path + new_json_filename, 'w') as f:
         json_string = json.dumps(info)

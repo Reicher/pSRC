@@ -1,44 +1,41 @@
-# image_viewer.py
+# image_handler.py
 import io
 import os
-import random
-import string
-
-import PySimpleGUI as sg
+import PySimpleGUI as Gui
 from PIL import Image
 
 import importer
 import storage
 
-example_file = "/home/regen/psrc/tmp/PXL_20211112_220502078.jpg"
+example_file = "/tmp/PXL_20211112_111050667.jpg"
 
 file_types = [("JPEG (*.jpg)", "*.jpg"),
               ("All files (*.*)", "*.*")]
 
-sg.ChangeLookAndFeel('Dark')
+Gui.ChangeLookAndFeel('Dark')
 
 
 def main():
     settings = storage.init()
     layout = [
-        [sg.Image(key="-IMAGE-"),
-         sg.Text('', size=(20, None), k='-C1-'),
-         sg.Text('', k='-C2-')],
+        [Gui.Image(key="-IMAGE-"),
+         Gui.Text('', size=(20, None), k='-C1-'),
+         Gui.Text('', k='-C2-')],
         [
-            # sg.Radio('Permission Granted', "RADIO1", default=False)
-            sg.Text("Image File To Import"),
-            sg.Input(size=(24, 1), key="-FILE-", default_text=example_file), # FolderBrowse i framtiden
-            sg.FileBrowse(file_types=file_types),
-            sg.Button("Show Image"),
-            sg.Button("Analyse Image"),
-            sg.Button("Import Image"),
+            # Gui.Radio('Permission Granted', "RADIO1", default=False)
+            Gui.Text("Image File To Import"),
+            Gui.Input(size=(24, 1), key="-FILE-", default_text=example_file),
+            Gui.FileBrowse(file_types=file_types, button_text='WHAAAT'),
+            Gui.Button("Show Image"),
+            Gui.Button("Analyse Image"),
+            Gui.Button("Import Image"),
         ],
     ]
-    window = sg.Window("Image Viewer", layout)
+    window = Gui.Window("Image Viewer", layout)
     while True:
         event, values = window.read()
 
-        if event == "Exit" or event == sg.WIN_CLOSED:
+        if event == "Exit" or event == Gui.WIN_CLOSED:
             break
         elif event == "Show Image":
             filename = values["-FILE-"]
